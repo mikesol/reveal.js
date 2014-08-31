@@ -181,7 +181,7 @@
 					</p>
 				     <script type="text/javascript">
 				      $(function () {
-				         purcell.make_session('page4',['page4','page5','page6']);
+				         purcell.make_session('page4',['page4','page5','page6','page7']);
 				         var out = make_purcell_header();
 				         var out = make_complex_example(out)
 				         purcell.make_websocket('page4',out);
@@ -229,25 +229,41 @@ WHERE (pitch.val = 6 OR pitch.val = 2) AND (name.val = 'note');
 					<svg id="page6" width="100%"></svg>
 					<p>
 					Here are some suggestions.
+					</p>
+					<pre>
+<code>--Only execute one query at a time. Queries are delimited by semicolons.
+SELECT accidental.id AS id FROM accidental;
+SELECT name.id AS id FROM name WHERE name.val = 'clef';
+SELECT beam.val AS val FROM beam GROUP BY beam.val;
+SELECT x_position.id AS id, x_position.val AS val
+  FROM x_position JOIN name ON x_position.id = name.id
+  WHERE name.val = 'bar_line';
+SELECT duration_log.id AS id FROM duration_log WHERE duration_log.val = -1;</code></pre>
 				<textarea id="sql_input_page6" style="font-size:20px;width:100%"
 				rows="3"
-				>SELECT duration_log.id AS id FROM duration_log WHERE duration_log.val = 1;
+				>SELECT duration_log.id AS id FROM duration_log WHERE duration_log.val = -1;
 				</textarea><div style="display:table;margin:auto">
                                 <button class="pitch"
 				onclick="interpret_query_page6()">execute</button>
 				<div id="sql_result_page6"></div>
-					</p>
 				</section>
 				<section>
 					<p>
 					Modifications are possible as well.
 					</p>
-					<svg id="page6" width="100%"></svg>
+					<svg id="page7" width="100%"></svg>
 					<p>
 					To change all sharps in the score
 					above to flats, execute the
 					statement below.
 					</p>
+									<textarea id="sql_input_page7" style="font-size:20px;width:100%"
+				rows="3"
+				>UPDATE accidental SET val = -1 WHERE val = 1;
+				</textarea><div style="display:table;margin:auto">
+                                <button class="pitch"
+				onclick="interpret_query_page7()">execute</button>
+				<div id="sql_result_page7"></div>
 				</section>
 
 				<section>
@@ -257,9 +273,11 @@ WHERE (pitch.val = 6 OR pitch.val = 2) AND (name.val = 'note');
 					and animated contexts. For example,
 					click on the notes below.
 					</p>
-					<svg id="page6" width="100%"></svg>
+					<svg id="page8" width="100%"></svg>
 				</section>
 				<section>
+				<section>
+					<h2>Mini-Editor</h2>
 					<p>
 					Check out the
 					slides below to play with a slightly
@@ -267,9 +285,95 @@ WHERE (pitch.val = 6 OR pitch.val = 2) AND (name.val = 'note');
 					note name will add a note, and
 					clicking on other buttons will
 					control aspects of the next added
-					note.  Below ths score is an SQL
-					editor.
+					note.
 					</p>
+				</section>
+				  <section>
+				   <script type="text/javascript">
+				      $(function () {
+				         purcell.make_session('simple_editor',['simple_editor']);
+				         var out = make_purcell_header();
+				         purcell.make_websocket('simple_editor',out);
+				      });
+				    </script>
+
+					<div id="webpage">
+			      <div class="purcell_content">
+			        <button class="pitch" onclick="purcell.$e$$ion$.simple_editor.shiftX(null)">&#8635;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.simple_editor.shiftX(90)">&#8606;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.simple_editor.shiftX(30)">&#8592;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.simple_editor.shiftX(-30)">&#8594;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.simple_editor.shiftX(-90)">&#8608;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.simple_editor.shiftX(3.1416)">&#8618;</button>
+			      </div>
+			      <!--<canvas id="engraving" width="1000" height="100">
+			      </canvas>-->
+			      <svg id="engraving" width="100%"></svg>
+			      <div id="simple_editor_spinny">
+			      </div>
+			      <div class="purcell_content">
+			        <span class="text-span" id="simple_editor_currentPitch"></span>
+			        <button class="pitch" onclick="purcell.$e$$ion$.simple_editor.addNoteN(0)">C</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.simple_editor.addNoteN(1)">D</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.simple_editor.addNoteN(2)">E</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.simple_editor.addNoteN(3)">F</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.simple_editor.addNoteN(4)">G</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.simple_editor.addNoteN(5)">A</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.simple_editor.addNoteN(6)">B</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.simple_editor.addNoteN(null)">R</button>
+			        <button class="barline" onclick="purcell.$e$$ion$.simple_editor.addBarLineN()">|</button>
+			      </div>
+			      <hr>
+			      <div class="purcell_content">
+			        <span class="duration" class="bordered"
+			        style="font-size:30px" id="simple_editor_currentRhythm"></span>
+			        <button class="duration" onclick="purcell.$e$$ion$.simple_editor.changeDuration(0)">&#xe1d2;</button>
+			        <button class="duration" onclick="purcell.$e$$ion$.simple_editor.changeDuration(-1)">&#xe1d3;</button>
+			        <button class="duration" onclick="purcell.$e$$ion$.simple_editor.changeDuration(-2)">&#xe1d5;</button>
+			        <button class="duration" onclick="purcell.$e$$ion$.simple_editor.changeDuration(-3)">&#xe1d7;</button>
+			        <button class="duration" onclick="purcell.$e$$ion$.simple_editor.changeDuration(-4)">&#xe1d9;</button>
+			        <button class="duration" onclick="purcell.$e$$ion$.simple_editor.changeDuration(-5)">&#xe1db;</button>
+			        <button class="duration" onclick="purcell.$e$$ion$.simple_editor.changeDuration(-6)">&#xe1dd;</button>
+			        <button class="duration" onclick="purcell.$e$$ion$.simple_editor.changeDuration(-7)">&#xe1df;</button>
+			        &nbsp;
+			        <span style="font-size:30px"  class="bordered" id="simple_editor_currentAccidental"></span>
+			        &nbsp;
+			        <button class="accidental" onclick="purcell.$e$$ion$.simple_editor.changeAccidental(null)">&nbsp;</button>
+			        <button class="accidental" onclick="purcell.$e$$ion$.simple_editor.changeAccidental(-1)">&#xe260;</button>
+			        <button class="accidental" onclick="purcell.$e$$ion$.simple_editor.changeAccidental(0)">&#xe261;</button>
+			        <button class="accidental" onclick="purcell.$e$$ion$.simple_editor.changeAccidental(1)">&#xe262;</button>
+			      </div>
+			      <hr>
+			    <div class="purcell_content">
+			    &nbsp;
+	              <span class="bordered" style="font-size:30px"  style="width:80px;" id="simple_editor_currentDynamic"></span>
+	              &nbsp;&nbsp; &nbsp; <button class="dynamic" onclick="purcell.$e$$ion$.simple_editor.changeDynamic(null)">&nbsp;</button>
+	              <button class="dynamic" onclick="purcell.$e$$ion$.simple_editor.changeDynamic('ppp')">&#58666;</button>
+	              <button class="dynamic" onclick="purcell.$e$$ion$.simple_editor.changeDynamic('pp')">&#58667;</button>
+	              <button class="dynamic" onclick="purcell.$e$$ion$.simple_editor.changeDynamic('p')">&#58656;</button>
+	              <button class="dynamic" onclick="purcell.$e$$ion$.simple_editor.changeDynamic('mp')">&#58668;</button>
+	              <button class="dynamic" onclick="purcell.$e$$ion$.simple_editor.changeDynamic('mf')">&#58669;</button>
+	              <button class="dynamic" onclick="purcell.$e$$ion$.simple_editor.changeDynamic('f')">&#58658;</button>
+	              <button class="dynamic" onclick="purcell.$e$$ion$.simple_editor.changeDynamic('ff')">&#58671;</button>
+	              <button class="dynamic" onclick="purcell.$e$$ion$.simple_editor.changeDynamic('fff')">&#58672;</button>
+	            </div>
+	            <hr>
+			      <div class="purcell_content">
+			        <span class="text-span" style="font-size:20px;" id="simple_editor_currentOctave"></span>
+			        <button class="octave" onclick="purcell.$e$$ion$.simple_editor.changeOctave(-1)">8vb</button>
+			        <button class="octave" onclick="purcell.$e$$ion$.simple_editor.changeOctave(1)">8va</button>
+			      </div>
+			      <hr>
+			      <div class="purcell_content">
+			        <span class="text-span" style="font-size:20px;" id="simple_editor_currentBeam"></span>
+			        <button class="beam" onclick="purcell.$e$$ion$.simple_editor.beamOn()">beam on</button>
+			        <button class="beam" onclick="purcell.$e$$ion$.simple_editor.beamOff()">beam off</button>
+			      </div>
+			    </div>
+				  </section>
+				<section>
+				
+				</section>
 				</section>
 
 				<section>

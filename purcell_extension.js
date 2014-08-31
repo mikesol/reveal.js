@@ -285,7 +285,7 @@ function interpret_query_page5() {
   purcell.$e$$ion$.page4.$0cket.send(JSON.stringify(out));
 }
 
-/////
+/////////////
 
 function processSql_page6(data) {
      console.log("received", data);
@@ -311,6 +311,36 @@ function interpret_query_page6() {
     sql:out,
     'return': purcell._be(purcell.$e$$ion$.page4.MY_NAME),
     subsequent:"processSql_page6"
+  };
+  purcell.$e$$ion$.page4.$0cket.send(JSON.stringify(out));
+}
+
+/////////////
+
+function processSql_page7(data) {
+     console.log("received", data);
+     //console.log("DO", data.information);
+     var stringified = JSON.stringify(data.information,
+     function(key, val) {
+         if (val == null) {return val; }
+         return val.toFixed ? Number(val.toFixed(3)) : val;
+         }, 2);
+     if (stringified != '[]') {
+       $('#sql_result_page7').text(stringified);
+     } else {
+       $('#sql_result_page7').text('');
+     }
+     purcell.$e$$ion$.page4.draw(data);
+}
+function interpret_query_page7() {
+  var out = [{name:"information", sql :
+  $("#sql_input_page7").val()}];
+  purcell.append_standard_graphical_queries(out);
+  out = {
+    client:purcell.$e$$ion$.page4.MY_NAME,
+    sql:out,
+    'return': purcell._be(purcell.$e$$ion$.page4.MY_NAME),
+    subsequent:"processSql_page7"
   };
   purcell.$e$$ion$.page4.$0cket.send(JSON.stringify(out));
 }
