@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>reveal.js - The HTML Presentation Framework</title>
+		<title>purcell</title>
 
 		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
 		<meta name="author" content="Hakim El Hattab">
@@ -15,7 +15,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 		<link rel="stylesheet" href="css/reveal.min.css">
-		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+		<link rel="stylesheet" href="css/theme/sky.css" id="theme">
 
 		<!-- For syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -34,8 +34,20 @@
 		<!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
 		<![endif]-->
-	</head>
 
+	    <script src="../purcell/third_party/jquery/jquery-1.11.1.min.js" type="text/javascript"></script>
+	    <script src="../purcell/third_party/spin/spin.js" type="text/javascript"></script>
+	    <script src="../purcell/third_party/spin/jquery.spin.js" type="text/javascript"></script>
+	    <script src="../purcell/third_party/snap/snap.svg-min.js" type="text/javascript"></script>
+	    <script src="../purcell/js/purcell.js" type="text/javascript"></script>
+	    <script src="../purcell/js/purcell_websocket.js"
+	    type="text/javascript"></script>
+	    <!--<script src="../third_party/sql.js/sql.js" type="text/javascript"></script>
+	    <script src="../js/purcell_sql_js.js"
+	    type="text/javascript"></script>-->
+	    <link href="../purcell/css/purcell.css" rel="stylesheet" type="text/css"></link>
+	</head>
+<script type="text/javascript" src="purcell_extension.js"></script>
 	<body>
 
 		<div class="reveal">
@@ -45,8 +57,8 @@
 				<section>
 					<h1>Purcell</h1>
 					<p>
-					A highly dynamic relational model of music
-					engraving.
+					A dynamic relational model of music
+					engraving
 					</p>
 				</section>
 
@@ -57,8 +69,15 @@
 					interacted with dynamically.
 					Below is a purcell score!
 					</p>
-					<svg id="page1" width="100%"></svg>
-
+				    <script type="text/javascript">
+				      $(function () {
+				         purcell.make_session('page1',['page1']);
+				         var out = make_purcell_header();
+				         var out = make_first_example(out)
+				         purcell.make_websocket('page1',out);
+				      });
+				    </script>
+					<svg id="page1" width="50%"></svg>
 				</section>
 
 				<section>
@@ -66,9 +85,42 @@
 					Of course, it is more interesting if
 					we can add elements dynamically.
 					Click on the buttons below to add
-					some quarter notes.
-					<svg id="page2" width="100%"></svg>
+					some quarter notes, rests (R),
+					and barlines (|).
 					</p>
+				    <script type="text/javascript">
+				      $(function () {
+				         purcell.make_session('page2',['page2',
+				         'page3']);
+				         var out = make_purcell_header();
+				         purcell.make_websocket('page2',out);
+				      });
+				    </script>
+				<div id="webpage">
+			      <div class="purcell_content">
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(null)">&#8635;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(90)">&#8606;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(30)">&#8592;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(-30)">&#8594;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(-90)">&#8608;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(3.1416)">&#8618;</button>
+			      </div>
+			      <svg id="page2" width="100%"></svg>
+			      <div id="page2_spinny">
+			      </div>
+			      <div class="purcell_content">
+			        <span class="text-span" id="page2_currentPitch"></span>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(0)">C</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(1)">D</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(2)">E</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(3)">F</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(4)">G</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(5)">A</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(6)">B</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(null)">R</button>
+			        <button class="barline" onclick="purcell.$e$$ion$.page2.addBarLineN()">|</button>
+			      </div>
+			    </div>					
 				</section>
 
 				<section>
@@ -78,7 +130,38 @@
 					are created on a server and can be
 					visualzied anywhere.
 					</p>
-					<svg id="page3" width="100%"></svg>
+				    <script type="text/javascript">
+				      $(function () {
+				         //purcell.make_session('page2',['page2']);
+				         //var out = make_purcell_header();
+				         //purcell.make_websocket('page2',out);
+				      });
+				    </script>
+				<div id="webpage">
+			      <div class="purcell_content">
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(null)">&#8635;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(90)">&#8606;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(30)">&#8592;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(-30)">&#8594;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(-90)">&#8608;</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(3.1416)">&#8618;</button>
+			      </div>
+			      <svg id="page3" width="100%"></svg>
+			      <div id="page2_spinny">
+			      </div>
+			      <div class="purcell_content">
+			        <span class="text-span" id="page2_currentPitch"></span>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(0)">C</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(1)">D</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(2)">E</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(3)">F</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(4)">G</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(5)">A</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(6)">B</button>
+			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(null)">R</button>
+			        <button class="barline" onclick="purcell.$e$$ion$.page2.addBarLineN()">|</button>
+			      </div>
+			    </div>					
 					<p>
 					Keep editing
 					and flip back and forth between the
@@ -96,6 +179,15 @@
 					data into tables representing
 					engraved music.
 					</p>
+				     <script type="text/javascript">
+				      $(function () {
+				         purcell.make_session('page4',['page4','page5','page6']);
+				         var out = make_purcell_header();
+				         var out = make_complex_example(out)
+				         purcell.make_websocket('page4',out);
+				      });
+				    </script>
+
 					<svg id="page4" width="100%"></svg>
 					<p>
 					This data can be rendered to any
@@ -113,12 +205,21 @@
 					</p>
 					<svg id="page5" width="100%"></svg>
 					<p>
-					Click on "Execute" below to execute
-					the SQL query.  In purcell speak, it
+					Click on "execute" below to execute
+					the SQL query.<br>In purcell speak, it
 					translates to "select the ID of all
 					notes in the score where the pitch
-					is C or D."
+					is B or E."
 					</p>
+				<textarea id="sql_input_page5" style="font-size:20px;width:100%"
+				rows="3"
+				>SELECT pitch.id AS id
+FROM pitch JOIN name ON pitch.id = name.id
+WHERE (pitch.val = 6 OR pitch.val = 2) AND (name.val = 'note');
+				</textarea><div style="display:table;margin:auto">
+                                <button class="pitch"
+				onclick="interpret_query_page5()">execute</button>
+				<div id="sql_result_page5"></div>
 				</section>
 				<section>
 					<p>
@@ -128,6 +229,13 @@
 					<svg id="page6" width="100%"></svg>
 					<p>
 					Here are some suggestions.
+				<textarea id="sql_input_page6" style="font-size:20px;width:100%"
+				rows="3"
+				>SELECT duration_log.id AS id FROM duration_log WHERE duration_log.val = 1;
+				</textarea><div style="display:table;margin:auto">
+                                <button class="pitch"
+				onclick="interpret_query_page6()">execute</button>
+				<div id="sql_result_page6"></div>
 					</p>
 				</section>
 				<section>
