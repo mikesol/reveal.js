@@ -46,6 +46,19 @@
 	    <script src="../js/purcell_sql_js.js"
 	    type="text/javascript"></script>-->
 	    <link href="../purcell/css/purcell.css" rel="stylesheet" type="text/css"></link>
+
+	    <script type="text/javascript">
+	    var GLOBAL_WRITE_FLAG = false;
+	    var WS_URL = 'ws://localhost:9000';
+	    var PASSWORD = "not_telling_you";
+	    $(function () {
+ purcell.make_session('page1',['page1']);
+ purcell.make_session('page2',['page2','page3']);
+ purcell.make_session('page4',['page4','page5','page6','page7']);
+ purcell.make_session('page8',['page8']);
+ purcell.make_session('simple_editor',['simple_editor']);
+	    });
+	    </script>
 	</head>
 <script type="text/javascript" src="purcell_extension.js"></script>
 	<body>
@@ -60,6 +73,22 @@
 					A dynamic relational model of music
 					engraving
 					</p>
+					<p id="loading_text">[loading 0%]</p>
+					<p id="loading_text"
+					style="font-size:20px;">(please use
+					Google Chrome or Safari to view this
+					page)</p>
+					<div id="init_spin"></div>
+					<script>
+					$(function() {
+					  //var target =
+					  //var target = document.getElementById('init_spin');
+					  //var spinner
+					  $('#init_spin').spin({length:100,
+					  radius:40,
+					  width:10});
+					})
+					</script>
 				</section>
 
 				<section>
@@ -71,13 +100,17 @@
 					</p>
 				    <script type="text/javascript">
 				      $(function () {
-				         purcell.make_session('page1',['page1']);
 				         var out = make_purcell_header();
-				         var out = make_first_example(out)
-				         purcell.make_websocket('page1',out);
+				         out = make_first_example(out);
+				         out = array_to_single_sql(out);
+				         if (GLOBAL_WRITE_FLAG) {
+				           purcell.make_websocket('page1',{ws_url:WS_URL,out:out, cache:"simple_example.db", pwd:PASSWORD});
+				         } else {
+				           purcell.make_websocket('page1',{ws_url:WS_URL,initialize:"simple_example.db"});
+				         }
 				      });
 				    </script>
-					<svg id="page1" width="50%"></svg>
+					<svg height="200px" id="page1" width="50%"></svg>
 				</section>
 
 				<section>
@@ -89,11 +122,21 @@
 					and barlines (|).
 					</p>
 				    <script type="text/javascript">
-				      $(function () {
-				         purcell.make_session('page2',['page2',
-				         'page3']);
+				      $(function() {
+				         purcell.$e$$ion$.page1.function_queue.push(
+				         function () {
+				         update_loading(10);
 				         var out = make_purcell_header();
-				         purcell.make_websocket('page2',out);
+				         out = array_to_single_sql(out);
+				         if (GLOBAL_WRITE_FLAG) {
+				           purcell.make_websocket('page2',{ws_url:WS_URL,out:out,
+				           cache:"blank_editor.db",
+				           pwd:PASSWORD});
+				         } else {
+				           purcell.make_websocket('page2',
+				           {ws_url:WS_URL,initialize:"blank_editor.db"});
+				         }
+				      });
 				      });
 				    </script>
 				<div id="webpage">
@@ -105,7 +148,7 @@
 			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(-90)">&#8608;</button>
 			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(3.1416)">&#8618;</button>
 			      </div>
-			      <svg id="page2" width="100%"></svg>
+			      <svg height="200px" id="page2" width="100%"></svg>
 			      <div id="page2_spinny">
 			      </div>
 			      <div class="purcell_content">
@@ -130,13 +173,6 @@
 					are created on a server and can be
 					visualzied anywhere.
 					</p>
-				    <script type="text/javascript">
-				      $(function () {
-				         //purcell.make_session('page2',['page2']);
-				         //var out = make_purcell_header();
-				         //purcell.make_websocket('page2',out);
-				      });
-				    </script>
 				<div id="webpage">
 			      <div class="purcell_content">
 			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(null)">&#8635;</button>
@@ -146,11 +182,11 @@
 			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(-90)">&#8608;</button>
 			        <button class="pitch" onclick="purcell.$e$$ion$.page2.shiftX(3.1416)">&#8618;</button>
 			      </div>
-			      <svg id="page3" width="100%"></svg>
-			      <div id="page2_spinny">
+			      <svg height="200px" id="page3" width="100%"></svg>
+			      <div id="page3_spinny">
 			      </div>
 			      <div class="purcell_content">
-			        <span class="text-span" id="page2_currentPitch"></span>
+			        <span class="text-span" id="page3_currentPitch"></span>
 			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(0)">C</button>
 			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(1)">D</button>
 			        <button class="pitch" onclick="purcell.$e$$ion$.page2.addNoteN(2)">E</button>
@@ -181,14 +217,23 @@
 					</p>
 				     <script type="text/javascript">
 				      $(function () {
-				         purcell.make_session('page4',['page4','page5','page6','page7']);
+                                         purcell.$e$$ion$.page2.function_queue.push(
+				         function () {
+				         update_loading(20);
 				         var out = make_purcell_header();
-				         var out = make_complex_example(out)
-				         purcell.make_websocket('page4',out);
-				      });
+				         out = make_complex_example(out)
+				         out = array_to_single_sql(out);
+				         if (GLOBAL_WRITE_FLAG) {
+				           purcell.make_websocket('page4',{ws_url:WS_URL,out:out,cache:"complex_example.db",pwd:PASSWORD});
+				         } else {
+				           purcell.make_websocket('page4',{ws_url:WS_URL,initialize:"complex_example.db"});
+				         }
+				      })});
 				    </script>
 
-					<svg id="page4" width="100%"></svg>
+					<svg height="200px" id="page4" width="100%"></svg>
+			      <div id="page3_spinny">
+			      </div>
 					<p>
 					This data can be rendered to any
 					surface that draws lines, curves,
@@ -203,7 +248,7 @@
 					arbitrary data about a score can be
 					retreived.
 					</p>
-					<svg id="page5" width="100%"></svg>
+					<svg height="200px" id="page5" width="100%"></svg>
 					<p>
 					Click on "execute" below to execute
 					the SQL query.<br>In purcell speak, it
@@ -211,6 +256,7 @@
 					notes in the score where the pitch
 					is B or E."
 					</p>
+			      <div id="page5_spinny"></div>
 				<textarea id="sql_input_page5" style="font-size:20px;width:100%"
 				rows="3"
 				>SELECT pitch.id AS id
@@ -226,10 +272,12 @@ WHERE (pitch.val = 6 OR pitch.val = 2) AND (name.val = 'note');
 					Use this page as a SQL sandbox for
 					the score below.
 					</p>
-					<svg id="page6" width="100%"></svg>
+					<svg height="200px" id="page6" width="100%"></svg>
 					<p>
 					Here are some suggestions.
 					</p>
+			      <div id="page6_spinny">
+			      </div>
 					<pre>
 <code>--Only execute one query at a time. Queries are delimited by semicolons.
 SELECT accidental.id AS id FROM accidental;
@@ -251,7 +299,9 @@ SELECT duration_log.id AS id FROM duration_log WHERE duration_log.val = -1;</cod
 					<p>
 					Modifications are possible as well.
 					</p>
-					<svg id="page7" width="100%"></svg>
+			      <div id="page7_spinny">
+			      </div>
+					<svg height="200px" id="page7" width="100%"></svg>
 					<p>
 					To change all sharps in the score
 					above to flats, execute the
@@ -270,10 +320,26 @@ SELECT duration_log.id AS id FROM duration_log WHERE duration_log.val = -1;</cod
 					<p>
 					purcell is ideal for engraving music
 					in embedded, dynamic, interactive,
-					and animated contexts. For example,
-					click on the notes below.
+					and animated contexts.
 					</p>
-					<svg id="page8" width="100%"></svg>
+					<script type="text/javascript">
+				      $(function () {
+                                         purcell.$e$$ion$.simple_editor.function_queue.push(
+				         function () {
+				         update_loading(70);
+				         var out = make_purcell_header();
+				         out = make_scale_example(out);
+				         out = array_to_single_sql(out);
+				         //console.log(out[0].sql);
+				         purcell.$e$$ion$.page8.function_queue.push(make_draw_repertoire);
+				         if (GLOBAL_WRITE_FLAG) {
+  				           purcell.make_websocket('page8',{ws_url:WS_URL,out:out,cache:"scale_for_animation.db",pwd:PASSWORD});
+				         } else {
+				           purcell.make_websocket('page8',{ws_url:WS_URL,initialize:"scale_for_animation.db"});
+				         }
+				      })});
+				      </script>
+					<svg height="200px" id="page8" width="100%"></svg>
 				</section>
 				<section>
 				<section>
@@ -281,20 +347,36 @@ SELECT duration_log.id AS id FROM duration_log WHERE duration_log.val = -1;</cod
 					<p>
 					Check out the
 					slides below to play with a slightly
-					more robust editor.  Clicking on the
+					more robust editor.
+					</p>
+					<hr>
+					<p>
+					Clicking on the
 					note name will add a note, and
 					clicking on other buttons will
 					control aspects of the next added
 					note.
 					</p>
+					<hr>
+					<p>
+					Below the editor's slide, an SQL
+					editor can be used to query the score.
+					</p>
 				</section>
 				  <section>
 				   <script type="text/javascript">
 				      $(function () {
-				         purcell.make_session('simple_editor',['simple_editor']);
+                                         purcell.$e$$ion$.page4.function_queue.push(
+				         function () {
+				         update_loading(50);
 				         var out = make_purcell_header();
-				         purcell.make_websocket('simple_editor',out);
-				      });
+				         out = array_to_single_sql(out);
+				         if (GLOBAL_WRITE_FLAG) {
+  				           purcell.make_websocket('simple_editor',{ws_url:WS_URL,out:out});
+				         } else {
+				           purcell.make_websocket('simple_editor',{ws_url:WS_URL,initialize:"blank_editor.db"});
+				         }
+				      })});
 				    </script>
 
 					<div id="webpage">
@@ -308,7 +390,7 @@ SELECT duration_log.id AS id FROM duration_log WHERE duration_log.val = -1;</cod
 			      </div>
 			      <!--<canvas id="engraving" width="1000" height="100">
 			      </canvas>-->
-			      <svg id="engraving" width="100%"></svg>
+			      <svg height="200px" id="simple_editor" width="100%"></svg>
 			      <div id="simple_editor_spinny">
 			      </div>
 			      <div class="purcell_content">
@@ -372,7 +454,13 @@ SELECT duration_log.id AS id FROM duration_log WHERE duration_log.val = -1;</cod
 			    </div>
 				  </section>
 				<section>
-				
+				    <h2>Dynamic SQL Queries</h2>
+                    <textarea id="sql_input_simple_editor"
+				    style="font-size:20px;width:100%;"
+                    rows="10"></textarea>
+                    <button class="pitch"
+                    onclick="interpret_query_simple_editor()">evaluate</button>
+                    <div id="sql_result_simple_editor"></div>
 				</section>
 				</section>
 
@@ -384,12 +472,17 @@ SELECT duration_log.id AS id FROM duration_log WHERE duration_log.val = -1;</cod
 					<a href="mailto:mike@mikesolomon.org">
 					mike@mikesolomon.org</a>.
 					</p>
-					<svg id="page7" width="100%"></svg>
+					<svg height="200px" id="page7" width="100%"></svg>
 				</section>
 			</div>
 
 		</div>
 
+<a target="_blank" href="https://github.com/mikesol/purcell"><img style="position: absolute; top: 0;
+right: 0; border: 0;"
+src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67"
+alt="Fork me on GitHub"
+data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.min.js"></script>
 
