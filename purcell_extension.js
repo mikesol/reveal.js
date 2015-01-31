@@ -1,5 +1,5 @@
 function update_loading(n) {
-  $('#loading_text').text("[loading "+n+"\%]");
+  //$('#loading_text').text("[loading "+n+"\%]");
 }
 function make_purcell_header() {
 	    var out = [];
@@ -655,8 +655,8 @@ function deposit_draw_repertoire(data) {
        }
        make_draw_repertoire();
      } else {
-       $('#init_spin').spin(false);
-       $('#loading_text').text("");
+       //$('#init_spin').spin(false);
+       //$('#loading_text').text("");
        crunch_data_to_useable();
        do_animation();
      }

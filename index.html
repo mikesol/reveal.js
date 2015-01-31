@@ -15,7 +15,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 		<link rel="stylesheet" href="css/reveal.min.css">
-		<link rel="stylesheet" href="css/theme/sky.css" id="theme">
+		<link rel="stylesheet" href="css/theme/sky.css"
+		id="theme">
 
 		<!-- For syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -40,7 +41,7 @@
 	    <script src="../purcell/third_party/spin/jquery.spin.js" type="text/javascript"></script>
 	    <script src="../purcell/third_party/snap/snap.svg-min.js" type="text/javascript"></script>
 	    <script src="../purcell/js/purcell.js" type="text/javascript"></script>
-	    <script src="../purcell/js/purcell_websocket.js"
+	    <script src="../purcell/js/purcell_httpd.js"
 	    type="text/javascript"></script>
 	    <!--<script src="../third_party/sql.js/sql.js" type="text/javascript"></script>
 	    <script src="../js/purcell_sql_js.js"
@@ -49,7 +50,10 @@
 
 	    <script type="text/javascript">
 	    var GLOBAL_WRITE_FLAG = false;
-	    var WS_URL = 'ws://localhost:9000';
+	    var WS_URL = 'http://localhost:9000';
+	    //var WS_URL = 'ws://guido.grame.fr:9000';
+	    //var WS_URL = 'http://guido.grame.fr:9000';
+	    
 	    var PASSWORD = "not_telling_you";
 	    $(function () {
  purcell.make_session('page1',['page1']);
@@ -73,12 +77,13 @@
 					A dynamic relational model of music
 					engraving
 					</p>
-					<p id="loading_text">[loading 0%]</p>
+					<!--<p id="loading_text">[loading
+					0%]</p>-->
 					<p id="loading_text"
 					style="font-size:20px;">(please use
-					Google Chrome or Safari to view this
+					Google Chrome, Opera or Safari to view this
 					page)</p>
-					<div id="init_spin"></div>
+					<!--<div id="init_spin"></div>
 					<script>
 					$(function() {
 					  //var target =
@@ -88,7 +93,7 @@
 					  radius:40,
 					  width:10});
 					})
-					</script>
+					</script>-->
 				</section>
 
 				<section>
