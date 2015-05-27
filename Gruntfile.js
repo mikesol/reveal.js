@@ -14,7 +14,42 @@ module.exports = function(grunt) {
 				' * Copyright (C) 2015 Hakim El Hattab, http://hakim.se\n' +
 				' */'
 		},
-
+    imagemin: {
+        png: {
+          options: {
+            optimizationLevel: 7
+          },
+          files: [
+            {
+              // Set to true to enable the following options…
+              expand: true,
+              // cwd is 'current working directory'
+              cwd: 'img/',
+              src: ['*.png'],
+              // Could also match cwd line above. i.e. project-directory/img/
+              dest: 'img/compressed/',
+              ext: '.png'
+            }
+          ]
+        },
+        jpg: {
+          options: {
+            progressive: true
+          },
+          files: [
+            {
+              // Set to true to enable the following options…
+              expand: true,
+              // cwd is 'current working directory'
+              cwd: 'img/',
+              src: ['*.jpg'],
+              // Could also match cwd. i.e. project-directory/img/
+              dest: 'img/compressed/',
+              ext: '.jpg'
+            }
+          ]
+        }
+      },
 		qunit: {
 			files: [ 'test/*.html' ]
 		},
@@ -113,6 +148,18 @@ module.exports = function(grunt) {
 			]
 		},
 
+    'ftp-deploy': {
+            
+            dist_com: {
+              auth: {
+                host: 'ftp.mikesolomon.org',
+                authKey: 'key1'
+              },
+              src: '.',
+              dest: '/public_html/mikesolomon.org/CMC2015',
+            }
+          },
+
 		watch: {
             options: {
                 livereload: true
@@ -146,6 +193,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks( 'grunt-contrib-connect' );
 	grunt.loadNpmTasks( 'grunt-autoprefixer' );
 	grunt.loadNpmTasks( 'grunt-zip' );
+	grunt.loadNpmTasks('grunt-contrib-imagemin');
+	grunt.loadNpmTasks('grunt-ftp-deploy');
 
 	// Default task
 	grunt.registerTask( 'default', [ 'css', 'js' ] );
@@ -170,5 +219,11 @@ module.exports = function(grunt) {
 
 	// Run tests
 	grunt.registerTask( 'test', [ 'jshint', 'qunit' ] );
+	
+	// Imagemin
+	grunt.registerTask('imageminify', ['imagemin']);
+
+	// Imagemin
+	grunt.registerTask('ftpify', ['ftp-deploy']);
 
 };
